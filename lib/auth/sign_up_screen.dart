@@ -94,10 +94,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 12),
                   Text('Create Account', style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 4),
-                  Text(
-                    'Start your PrepNexa journey',
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                    Text(
+                      'Start your Cognix journey',
+                      style: theme.textTheme.bodyMedium,
+                    ),
                 ],
               ),
 

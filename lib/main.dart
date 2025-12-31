@@ -29,7 +29,7 @@ class _PrepNexaAppState extends State<PrepNexaApp> {
     return MaterialApp(
       navigatorKey: _navKey,
       debugShowCheckedModeBanner: false,
-      title: 'PrepNexa',
+      title: 'Cognix',
       theme: AppTheme.lightTheme(ThemeData()).copyWith(
         textTheme: GoogleFonts.spaceGroteskTextTheme(
           ThemeData(useMaterial3: true).textTheme,
@@ -41,6 +41,7 @@ class _PrepNexaAppState extends State<PrepNexaApp> {
         '/signup': (c) => SignUpScreen(onSignedUp: _onAuthChanged),
         '/dashboard': (c) => DashboardScreen(onLogout: _onLogout),
         '/upload-pyqs': (c) => const UploadPyqsScreen(),
+        '/uploads': (c) => const UploadPyqsScreen(),
       },
     );
   }

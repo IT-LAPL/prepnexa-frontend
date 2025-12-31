@@ -1,4 +1,6 @@
-# prepnexa
+# Cognix
+
+This project was renamed from `prepnexa` to **Cognix** (product display name).
 
 A new Flutter project.
 

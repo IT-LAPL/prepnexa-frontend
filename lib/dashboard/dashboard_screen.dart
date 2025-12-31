@@ -13,7 +13,7 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PrepNexa'),
+        title: const Text('Cognix'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -122,7 +122,7 @@ const List<_DashboardItem> _items = [
     icon: Icons.upload_file,
     title: 'Upload PYQs',
     subtitle: 'Add previous papers',
-    route: '/upload-pyqs',
+    route: '/uploads',
   ),
   _DashboardItem(
     icon: Icons.bar_chart,

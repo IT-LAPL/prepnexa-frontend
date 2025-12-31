@@ -64,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 12),
-                  Text('PrepNexa', style: theme.textTheme.headlineSmall),
+                    Text('Cognix', style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 4),
                   Text(
                     'Prepare smarter. Predict better.',

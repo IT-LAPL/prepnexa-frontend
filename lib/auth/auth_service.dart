@@ -9,7 +9,7 @@ class AuthService {
   static const String _baseUrl = 'https://prepnexa-api.stpindia.org';
   // change to http://localhost:8000 for local dev
 
-  String? accessToken;
+  String? accessToken = 'demo-token-abc123';
   String? email;
   String? name;
   bool isLoggedIn = false;

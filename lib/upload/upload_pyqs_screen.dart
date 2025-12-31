@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
+import '../auth/auth_service.dart';
 
 class UploadPyqsScreen extends StatefulWidget {
   const UploadPyqsScreen({Key? key}) : super(key: key);
@@ -10,6 +12,11 @@ class UploadPyqsScreen extends StatefulWidget {
 
 class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
   List<PlatformFile> _selectedFiles = [];
+  bool _uploading = false;
+
+  // fixed values requested
+  static const String _examId = 'd57b0541-dcb1-4784-893b-f676dd766f2c';
+  static const String _year = '2023';
 
   Future<void> _pickFiles() async {
     final result = await FilePicker.platform.pickFiles(
@@ -22,6 +29,54 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
       setState(() {
         _selectedFiles = result.files;
       });
+    }
+  }
+
+  Future<void> _uploadFiles() async {
+    if (_selectedFiles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No files selected')));
+      return;
+    }
+
+    setState(() => _uploading = true);
+
+    try {
+      final auth = AuthService.instance;
+      final uri = Uri.parse('https://prepnexa-api.stpindia.org/uploads');
+
+      final request = http.MultipartRequest('POST', uri);
+
+      // Add Authorization header
+      if (auth.accessToken != null) {
+        request.headers['Authorization'] = 'Bearer ${auth.accessToken}';
+      }
+
+      // Add fields
+      request.fields['exam_id'] = _examId;
+      request.fields['year'] = _year;
+
+      // Attach files
+      for (var pf in _selectedFiles) {
+        if (pf.bytes != null) {
+          request.files.add(http.MultipartFile.fromBytes('files', pf.bytes!, filename: pf.name));
+        } else if (pf.path != null) {
+          request.files.add(await http.MultipartFile.fromPath('files', pf.path!, filename: pf.name));
+        }
+      }
+
+      final streamed = await request.send();
+      final res = await http.Response.fromStream(streamed);
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Upload successful')));
+        setState(() => _selectedFiles = []);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Upload failed: ${res.statusCode}')));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Upload error: $e')));
+    } finally {
+      setState(() => _uploading = false);
     }
   }
 
@@ -77,6 +132,20 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
+                      ),
+
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FilledButton(
+                              onPressed: _uploading ? null : _uploadFiles,
+                              child: _uploading
+                                  ? SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: theme.colorScheme.onPrimary))
+                                  : const Text('Upload to /uploads'),
+                            ),
+                          ),
+                        ],
                       ),
 
                       if (_selectedFiles.isNotEmpty) ...[
@@ -144,7 +213,7 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Once uploaded, PrepNexa will extract questions, analyze topic-wise trends, and use AI to predict future question papers.',
+                          'Once uploaded, Cognix will extract questions, analyze topic-wise trends, and use AI to predict future question papers.',
                           style: theme.textTheme.bodySmall,
                         ),
                       ),
