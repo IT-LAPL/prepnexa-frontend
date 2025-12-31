@@ -30,7 +30,6 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             /// 👋 Welcome Card
             Card(
               elevation: 2,
@@ -76,10 +75,7 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             /// 📌 Section Title
-            Text(
-              'Your Tools',
-              style: theme.textTheme.titleMedium,
-            ),
+            Text('Your Tools', style: theme.textTheme.titleMedium),
             const SizedBox(height: 12),
 
             /// 🧩 Dashboard Grid (NO OVERFLOW)
@@ -171,21 +167,11 @@ class _DashboardCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                item.icon,
-                size: 36,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(item.icon, size: 36, color: theme.colorScheme.primary),
               const Spacer(),
-              Text(
-                item.title,
-                style: theme.textTheme.titleMedium,
-              ),
+              Text(item.title, style: theme.textTheme.titleMedium),
               const SizedBox(height: 4),
-              Text(
-                item.subtitle,
-                style: theme.textTheme.bodySmall,
-              ),
+              Text(item.subtitle, style: theme.textTheme.bodySmall),
             ],
           ),
         ),

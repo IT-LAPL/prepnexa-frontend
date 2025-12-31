@@ -26,8 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
 
-    await Future.delayed(const Duration(milliseconds: 400));
-    final ok = AuthService.instance.signIn(
+    final ok = await AuthService.instance.signIn(
       email: _emailCtrl.text.trim(),
       password: _passCtrl.text,
     );
@@ -54,7 +53,6 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-
               const SizedBox(height: 40),
 
               /// 🔷 Brand Header
@@ -66,10 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    'PrepNexa',
-                    style: theme.textTheme.headlineSmall,
-                  ),
+                  Text('PrepNexa', style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 4),
                   Text(
                     'Prepare smarter. Predict better.',
@@ -91,10 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        'Sign In',
-                        style: theme.textTheme.titleLarge,
-                      ),
+                      Text('Sign In', style: theme.textTheme.titleLarge),
                       const SizedBox(height: 16),
 
                       TextField(
@@ -131,7 +123,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Text('Continue'),
                       ),

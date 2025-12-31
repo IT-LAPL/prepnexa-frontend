@@ -30,16 +30,13 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Upload PYQs'),
-      ),
+      appBar: AppBar(title: const Text('Upload PYQs')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               /// 📘 Header
               Text(
                 'Upload Previous Year Question Papers',
@@ -98,10 +95,7 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
               /// 📄 Selected Files
               if (_selectedFiles.isNotEmpty) ...[
                 const SizedBox(height: 24),
-                Text(
-                  'Selected Files',
-                  style: theme.textTheme.titleMedium,
-                ),
+                Text('Selected Files', style: theme.textTheme.titleMedium),
                 const SizedBox(height: 8),
 
                 ListView.separated(
@@ -113,10 +107,7 @@ class _UploadPyqsScreenState extends State<UploadPyqsScreen> {
                     final file = _selectedFiles[index];
                     return ListTile(
                       leading: const Icon(Icons.insert_drive_file),
-                      title: Text(
-                        file.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      title: Text(file.name, overflow: TextOverflow.ellipsis),
                       subtitle: Text(
                         '${(file.size / 1024).toStringAsFixed(1)} KB',
                       ),

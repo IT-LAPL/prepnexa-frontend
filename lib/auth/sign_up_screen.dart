@@ -45,24 +45,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_passCtrl.text != _confirmCtrl.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
       return;
     }
 
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
 
-    await Future.delayed(const Duration(milliseconds: 400));
-    AuthService.instance.signUp(
+    final ok = await AuthService.instance.signUp(
       name: _nameCtrl.text.trim(),
       email: _emailCtrl.text.trim(),
       password: _passCtrl.text,
     );
 
     setState(() => _loading = false);
-    widget.onSignedUp?.call();
+
+    if (ok) {
+      widget.onSignedUp?.call();
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Signup failed')));
+    }
   }
 
   @override
@@ -75,7 +81,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-
               const SizedBox(height: 32),
 
               /// 🔷 Brand Header
@@ -87,10 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    'Create Account',
-                    style: theme.textTheme.headlineSmall,
-                  ),
+                  Text('Create Account', style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 4),
                   Text(
                     'Start your PrepNexa journey',
@@ -168,7 +170,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Text('Create Account'),
                         ),

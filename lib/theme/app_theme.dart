@@ -23,9 +23,7 @@ class AppTheme {
         color: Colors.white,
         elevation: 6,
         shadowColor: Colors.black12,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: EdgeInsets.all(8),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

@@ -1,36 +1,76 @@
-class AuthService {
-  AuthService._private() {
-    // Pre-seed demo credentials for quick testing
-    name = 'Demo User';
-    email = 'demo@prepnexa.dev';
-    _password = 'password123';
-    isLoggedIn = false;
-  }
-  static final AuthService instance = AuthService._private();
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-  String? name;
+class AuthService {
+  AuthService._();
+  static final AuthService instance = AuthService._();
+
+  static const String _baseUrl = 'https://prepnexa-api.stpindia.org';
+  // change to http://localhost:8000 for local dev
+
+  String? accessToken;
   String? email;
-  String? _password;
+  String? name;
   bool isLoggedIn = false;
 
-  bool signUp({required String name, required String email, required String password}) {
-    this.name = name;
-    this.email = email;
-    _password = password;
-    isLoggedIn = true;
-    return true;
+  /// ---------------- SIGN UP ----------------
+  Future<bool> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    final url = Uri.parse('$_baseUrl/users/');
+
+    final res = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'name': name, 'email': email, 'password': password}),
+    );
+
+    if (res.statusCode == 201) {
+      // auto-login after signup
+      return await signIn(email: email, password: password);
+    } else {
+      debugPrint('Signup failed: ${res.body}');
+      return false;
+    }
   }
 
-  bool signIn({required String email, required String password}) {
-    if (this.email == null || _password == null) return false;
-    if (this.email!.toLowerCase() == email.toLowerCase() && _password == password) {
+  /// ---------------- SIGN IN ----------------
+  Future<bool> signIn({required String email, required String password}) async {
+    final url = Uri.parse('$_baseUrl/users/login');
+
+    final res = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      accessToken = data['access_token'];
+      this.email = email;
       isLoggedIn = true;
       return true;
+    } else {
+      debugPrint('Login failed: ${res.body}');
+      return false;
     }
-    return false;
   }
 
+  /// ---------------- LOGOUT ----------------
   void logout() {
+    accessToken = null;
+    email = null;
     isLoggedIn = false;
+  }
+
+  /// ---------------- AUTH HEADER ----------------
+  Map<String, String> authHeader() {
+    return {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
   }
 }
